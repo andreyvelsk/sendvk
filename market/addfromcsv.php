@@ -2,9 +2,16 @@
 require 'addtomarket.php';
 
 $startrow = file_get_contents('number');
+$endrow = lines("Primer_tovara.csv");
 $localimagepath = '/home/andrey/www/tinashop/wp-content/uploads/2018/brit/';
 
-addFromCsvRow($startrow);
+for($i=$startrow; $i<=$endrow; $i++){
+	echo $i."<br><br>";
+	addFromCsvRow($i);
+	$f=fopen('number','w');
+	fwrite($f,$i);
+	fclose($f);
+}
 
 	function addFromCsvRow($startrow){
 
@@ -36,7 +43,7 @@ addFromCsvRow($startrow);
 						//echo "<br>-----------------------------------------<br>";
 
 					$market_item_id = addToMarket($good->images[0], $good->name, $good->total, $good->price);
-					addToWall($market_item_id);
+					//addToWall($market_item_id);
 
 			        break;
 			    }
@@ -46,4 +53,18 @@ addFromCsvRow($startrow);
 
 		}
 	}
+function lines($file) 
+{ 
+    // в начале ищем сам файл. Может быть, путь к нему был некорректно указан 
+    if(!file_exists($file))exit("Файл не найден"); 
+     
+    // рассмотрим файл как массив
+    $file_arr = file($file); 
+     
+    // подсчитываем количество строк в массиве 
+    $lines = count($file_arr); 
+     
+    // вывод результата работы функции 
+    return $lines; 
+}
 ?>
